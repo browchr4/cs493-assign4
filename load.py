@@ -60,7 +60,7 @@ def loads_put_delete(id):
             boat['loads'].remove(str(id))
             client.put(boat)
             client.delete(load_key)
-        return ('', 200)
+            return ('', 200)
     elif request.method == 'GET':
         load_key = client.key(constants.loads, int(id))
         load = client.get(key=load_key)

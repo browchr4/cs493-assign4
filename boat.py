@@ -51,7 +51,15 @@ def boats_put_delete_get(id):
         boat = client.get(key=boat_key)
         if boat is None:
             return('Invalid boat ID', 400)
+        elif len(boat['loads']) == 0:
+            client.delete(boat_key)
+            return ('', 200)
         else:
+            for x in boat['loads']:
+                load_key = client.key(constants.loads, int(x))
+                load = client.get(key=load_key)
+                load.update({'owner': load['owner'], 'boat': '', 'weight': load['weight'], 'contents': load['contents']})
+                client.put(load)
             client.delete(boat_key)
             return ('', 200)
     elif request.method == 'GET':
