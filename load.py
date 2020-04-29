@@ -51,7 +51,14 @@ def loads_put_delete(id):
         load = client.get(key=load_key)
         if load is None:
             return('Invalid load ID', 400)
+        elif load['boat'] == '':
+            client.delete(load_key)
+            return('', 200)
         else:
+            boat_key = client.key(constants.boats, int(load['boat']))
+            boat = client.get(key=boat_key)
+            boat['loads'].remove(str(id))
+            client.put(boat)
             client.delete(load_key)
         return ('', 200)
     elif request.method == 'GET':

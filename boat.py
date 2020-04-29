@@ -60,8 +60,13 @@ def boats_put_delete_get(id):
         if boat is None:
             return('Invalid boat ID', 400)
         else:
+            output = []
             for x in boat['loads']:
-                x['self'] = request.host_url + '/loads/' + x['id']
+                load_key = client.key(constants.loads, int(x))
+                load = client.get(key=load_key)
+                load['self'] = request.host_url + '/loads/' + str(x)
+                output.append(load)
+            boat['loads'] = output
             return (boat, 200)
     else:
         return 'Method not recogonized'
